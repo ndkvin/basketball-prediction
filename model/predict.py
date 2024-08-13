@@ -37,11 +37,9 @@ class BasketballActionClassifier:
         # Prediksi
         predictions = BasketballActionClassifier.model.predict(frames_batch)
        
-        frame_predictions = np.argmax(predictions, axis=-1)
-        # Hitung frekuensi setiap label
-        label_counts = Counter(frame_predictions)
+        predicted_index = np.argmax(predictions, axis=-1)
+
+        # Use the index to get the class name
+        class_name = self.class_names[int(predicted_index)]
         
-        # Pilih label dengan jumlah terbanyak
-        predicted_label = label_counts.most_common(1)[0][0]
-        
-        return self.class_names[predicted_label]
+        return class_name
