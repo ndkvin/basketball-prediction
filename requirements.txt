@@ -1,5 +1,5 @@
 tensorflow
 numpy
-cv2
+opencv-python
 fastapi
 uvicorn
