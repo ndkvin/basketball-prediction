@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
-from collections import Counter
 
 class BasketballActionClassifier:
     model = None 
@@ -39,7 +38,9 @@ class BasketballActionClassifier:
        
         predicted_index = np.argmax(predictions, axis=-1)
 
+        confidence = predictions[0][predicted_index][0]
+        
         # Use the index to get the class name
         class_name = self.class_names[int(predicted_index)]
         
-        return class_name
+        return class_name, float(confidence)
