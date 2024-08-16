@@ -7,6 +7,7 @@ class BasketballActionClassifier:
     class_names = ['layup', 'freethrow', 'jumpshoot']
     frame_size = (224, 224)
     max_frames = 30
+    
 
     def __init__(self):
         if BasketballActionClassifier.model is None:
