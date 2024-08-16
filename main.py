@@ -137,7 +137,7 @@ async def get_history(token: str = Depends(get_bearer_token)):
     datetime_str = data[datetime_start_index:]
 
     # SQL query to get the history based on username
-    sql = "SELECT * FROM activity WHERE username = %s"
+    sql = "SELECT * FROM activity WHERE username = %s ORDER BY id DESC"
     
     # Execute the query with the parameter
     connection.execute(sql, (username,))
