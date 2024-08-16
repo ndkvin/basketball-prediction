@@ -16,7 +16,7 @@ app = FastAPI(docs_url=None, redoc_url=None)
 
 predictor = BasketballActionClassifier()
 
-@app.get("/")
+@app.get("/api-basketai")
 def read_root():
     return {"Hello": "World"}
 
@@ -53,7 +53,7 @@ def validate_token(token: str) -> bool:
     return token in valid_tokens
 
 
-@app.post("/predict")
+@app.post("/api-basketai/predict")
 async def upload_file(
         video: UploadFile = File(),
         token: str = Depends(get_bearer_token)
@@ -118,7 +118,7 @@ async def upload_file(
         'confidence': confidence
     }
 
-@app.get("/history")
+@app.get("/api-basketai/history")
 async def get_history(token: str = Depends(get_bearer_token)):
     # Decode the token to get data
     data = decode(token)
@@ -154,4 +154,4 @@ async def get_history(token: str = Depends(get_bearer_token)):
 
     return history
 
-app.mount("/result", StaticFiles(directory="videos"), name="videos")
+app.mount("/api-basketai/result", StaticFiles(directory="videos"), name="videos")
