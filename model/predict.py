@@ -11,7 +11,8 @@ class BasketballActionClassifier:
 
     def __init__(self):
         if BasketballActionClassifier.model is None:
-            BasketballActionClassifier.model = load_model('./model/basket.h5')
+            print('here')
+            # BasketballActionClassifier.model = load_model('./model/basket.h5')
 
     def extract_frame(self, video_path):
         frame_list = []

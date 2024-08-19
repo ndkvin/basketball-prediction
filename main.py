@@ -1,16 +1,13 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, status, Header
+from fastapi.responses import FileResponse
 import os
 import uuid
 from model.predict import BasketballActionClassifier
 import mimetypes
 from database import connection, mysql
-from datetime import datetime
-import pytz
 from fastapi.staticfiles import StaticFiles
 from encode import decode
 import re
-
-jakarta_tz = pytz.timezone('Asia/Jakarta')
 
 app = FastAPI(docs_url=None, redoc_url=None)
 
@@ -154,4 +151,7 @@ async def get_history(token: str = Depends(get_bearer_token)):
 
     return history
 
-app.mount("/api-basketai/result", StaticFiles(directory="videos"), name="videos")
+@app.get("/api-basketai/result/{file_name}")
+async def get_result(file_name: str):
+    file_path = f"./videos/{file_name}"
+    return FileResponse(file_path)
