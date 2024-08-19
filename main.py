@@ -112,7 +112,8 @@ async def upload_file(
     print(confidence)
     return {
         'result': result,
-        'confidence': confidence
+        'confidence': confidence,
+        'file_name': file_name
     }
 
 @app.get("/api-basketai/history")
