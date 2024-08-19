@@ -151,8 +151,3 @@ async def get_history(token: str = Depends(get_bearer_token)):
         history.append(row_dict)
 
     return history
-
-@app.get("/api-basketai/{file_name}")
-async def get_result(file_name: str):
-    file_path = f"./videos/{file_name}"
-    return FileResponse(file_path)
