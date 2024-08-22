@@ -1,7 +1,7 @@
-from database import connection
+from database import db
 
-connection.execute(
-    '''
+# SQL query to create the table
+create_table_query = '''
     CREATE TABLE activity (
         id INT PRIMARY KEY AUTO_INCREMENT,
         username VARCHAR(255),
@@ -10,5 +10,11 @@ connection.execute(
         confidence FLOAT,
         created_at DATETIME
     );
-    '''
-)
+'''
+
+# Execute the query to create the table
+db.execute_query(create_table_query, commit=True)
+
+# Optionally, close the database connection if done
+db.close()
+
