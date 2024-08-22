@@ -18,9 +18,9 @@ def decode(encoded_data):
         print(f"Decoding error: {e}")
         return None
 
-# Example usage
-data = "example2024-08-15 21:12:53"
+# # Example usage
+# data = "example2024-08-15 21:12:53"
 
-# Double Base64 encode the data
-encoded_data = encode(data)
-print(f"Double Encoded Data: {encoded_data}")
+# # Double Base64 encode the data
+# encoded_data = encode(data)
+# print(f"Double Encoded Data: {encoded_data}")

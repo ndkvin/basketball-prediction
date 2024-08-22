@@ -4,8 +4,7 @@ import os
 import uuid
 from model.predict import BasketballActionClassifier
 import mimetypes
-from database import connection, mysql
-from fastapi.staticfiles import StaticFiles
+from database import db
 from encode import decode
 import re
 
@@ -97,17 +96,18 @@ async def upload_file(
 
     # Panggil fungsi prediksi
     result, confidence = predictor.predict(file_path)
-    
     insert_query = '''
         INSERT INTO activity (username, path, result, confidence, created_at)
         VALUES (%s, %s, %s, %s, %s)
     '''
-    
+
+    # Data to be inserted
     data = (username, file_name, result, float(confidence), datetime_str)
 
-    connection.execute(insert_query, data)
-
-    mysql.commit()
+    # Execute the insert query and commit the transaction
+    db.execute_query(insert_query, params=data, commit=True)
+    
+    db.close()
 
     print(confidence)
     return {
@@ -132,22 +132,25 @@ async def get_history(token: str = Depends(get_bearer_token)):
 
     datetime_start_index = match.start()
     username = data[:datetime_start_index]
-    datetime_str = data[datetime_start_index:]
 
     # SQL query to get the history based on username
     sql = "SELECT * FROM activity WHERE username = %s ORDER BY id DESC"
-    
+
     # Execute the query with the parameter
-    connection.execute(sql, (username,))
-    results = connection.fetchall()
+    results = db.execute_query(sql, (username,))
 
-    # Fetch column names from the cursor
-    column_names = [column[0] for column in connection.description]
-
-    # Convert each row into a dictionary
+    # Convert results into a list of dictionaries
     history = []
-    for row in results:
-        row_dict = dict(zip(column_names, row))
-        history.append(row_dict)
+    if results:
+        # Fetch column names from the cursor
+        column_names = [column[0] for column in results.description]
+
+        # Convert each row into a dictionary
+        for row in results.fetchall():
+            row_dict = dict(zip(column_names, row))
+            history.append(row_dict)
+
+    # Optionally, close the database connection if done
+    db.close()
 
     return history
