@@ -1,17 +1,20 @@
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import custom_object_scope
+import tensorflow_hub as hub
 
 class BasketballActionClassifier:
     model = None 
     class_names = ['layup', 'freethrow', 'jumpshoot']
     frame_size = (224, 224)
-    max_frames = 30
+    max_frames = 10
     
 
     def __init__(self):
         if BasketballActionClassifier.model is None:
-            BasketballActionClassifier.model = load_model('./model/basket.h5')
+            with custom_object_scope({'KerasLayer': hub.KerasLayer}):
+                BasketballActionClassifier.model = load_model('./model/basket.h5')
 
     def extract_frame(self, video_path):
         frame_list = []
@@ -23,7 +26,7 @@ class BasketballActionClassifier:
             if not flag:
                 break
             frame = cv2.resize(frame, self.frame_size)
-            frame_list.append(frame)
+            frame_list.append(frame/255.0)
         video.release()
         return np.array(frame_list)
 
